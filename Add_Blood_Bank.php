@@ -1,30 +1,39 @@
 <h2 >This Page is to Add Blood Bank</h2>
+<p><a href="javascript:history.go(-1)" title="Return to previous page">« Go back</a></p>
 <?php
-if($_POST)
-{
-	$title = $_POST['blood bank details'];
-	$description = $_POST['ta_description'];
 
-	$target_path = "uploads/";  
-	$target_path = $target_path.basename( $_FILES['file_image']['name']);   
-	
-	//var_dump($target_path);
-	//var_dump($_FILES);
-	//if(move_uploaded_file($_FILES['file_image']['tmp_name'], $target_path))
-	{  
-		$con = mysqli_connect('localhost','root','','blood bank management system');
-		$query = "INSERT INTO blood bank details(blood bank details,description,image_path) VALUES('$bloodbankdetails,'$description','$target_path')";
-		//echo $query;
-		$result = mysqli_query($con,$query);
-		if($result === true)
-			header("location:Add_Blood_Bank.php");
-	else
-	    echo "Sorry, file not uploaded, please try again!";  
+	if (isset($_POST['Add_hospital']))
+	{
+		 $db = mysqli_connect("localhost", "root", "", "blood bank management system");
+		 if ($db)
+		 {
+		 	$a=$_POST['txt_title'];
+		 	$b=$_POST['ta_description'];
+		 	$c=$_FILES['file_image']['name'];
+		 	$tempname=$_FILES['file_image']['tmp_name'];
+		 	$folder1="img/".$c;
+		 	$upload1=move_uploaded_file($tempname, $folder1);
+		 	$d=$_POST['addr'];
+		 	
+		 	$q="INSERT INTO `blood bank details`( `blood_bank_name`, `blood_bank_city`, `blood_bank_img`, `blood_bank_address`) VALUES ('$a','$b','$c','$d')";
+		 	
+		 	 $p=mysqli_query($db,$q);
+		 	 if ($q) {
+		 	 	             echo "success";
+
+		 	 }
+		 	 else{
+		 	 	echo mysqli_error($db);
+
+		 	 }
+
+		 	
+		 }
 	}
 
-}
-else
-{?>
+?>
+
+
 	<!DOCTYPE html>
 	<html>
 	<head>
@@ -53,22 +62,22 @@ else
 					</td>
 				</tr>
 				<tr>
-					<td>Is this Private Blood Bank</td>
+					<td>Address</td>
 					<td>
-						<input type="radio" name="rdo_featured" value="1">&nbsp;Yes
-						<input type="radio" name="rdo_featured" value="0" checked="true">&nbsp;No
-					</td>
+					<input type="text" name="addr"></td>
+				</tr>
+				<!--<tr>
+					<td>Is this Private Blood Bank</td>
+				
 				</tr>
 				<tr>
 					<td colspan="2">&nbsp;</td>
-				</tr>
+				</tr>!-->
 				<tr>
-					<td colspan="2"><input type="submit"></td>
+					<td colspan="2"><input type="submit" name="Add_hospital"></td>
 				</tr>
 			</table>
 		</form>
 		
 	</body>
 	</html>	
-<?php
-}?>
